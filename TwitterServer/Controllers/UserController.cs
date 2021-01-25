@@ -14,17 +14,26 @@ namespace TwitterServer.Controllers
     public class UserController : ControllerBase
     {
         private readonly IAddUserCommand _addUserCommand;
+        private readonly ISignInUserCommand _iSignInUserCommand;
 
-        public UserController(IAddUserCommand addUserCommand)
+        public UserController(IAddUserCommand addUserCommand , 
+                              ISignInUserCommand iSignInUserCommand)
         {
             _addUserCommand = addUserCommand;
+            _iSignInUserCommand = iSignInUserCommand;
         }
 
         [HttpPost]
         public async Task AddUser(AddUserDto request)
         {
-            await _addUserCommand.AddUser(request);
+            await _addUserCommand.AddUserHandler(request);
         }
+
+        [HttpPost("signIn")]
+        public async Task SignInUser(SignInUserDto request)
+        => await _iSignInUserCommand.SignInUserHandler(request);
+        
+
         //[HttpGet]
         //public async Task GetAll(AddUserDto request)
         //{

@@ -16,6 +16,5 @@ namespace TwitterServer.Models.Dto.Account
         public string Token { get; }
         public int ExpireIn { get; set; }
         public bool Succeeded { get; } = false;
-        public bool IsAdmin { get; set; } = false;
     }
 }

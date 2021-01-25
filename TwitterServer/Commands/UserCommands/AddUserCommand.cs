@@ -19,23 +19,28 @@ namespace TwitterServer.Commands.UserCommands
             _dbContext = dbContext;
         }
 
-        public async Task AddUser(AddUserDto request)
+        public async Task AddUserHandler(AddUserDto request)
         {
             var user = await _dbContext.Users.AnyAsync(x => x.Username == request.Username);
+            var email = await _dbContext.Users.AnyAsync(x => x.Email == request.Email);
+
             if (user)
                 throw new TwitterApiException("Username already exists!");
 
-            string username = request.Username;
-            string email = request.Email;
+            if (email)
+                throw new TwitterApiException("Email already exists!");
 
-            if (username == string.Empty)
-                username = email.Substring(0, email.IndexOf("@"));
+            string usernamestr = request.Username;
+            string emailstr = request.Email;
+
+            if (usernamestr == string.Empty)
+                usernamestr = emailstr.Substring(0, emailstr.IndexOf("@"));
 
             var userToSave = new UserEntity
             {
-                Username = username,
-                Email = request.Email,
-                Password = request.Password,
+                Username = usernamestr.ToLower(),
+                Email = request.Email.ToLower(),
+                Password = request.Password.ToLower(),
             };
 
             await _dbContext.Users.AddAsync(userToSave);
