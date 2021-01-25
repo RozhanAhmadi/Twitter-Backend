@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using TwitterServer.Commands.UserCommands;
 using Microsoft.EntityFrameworkCore;
 using TwitterServer.Data;
+using CommonObjects.Utilities;
 
 namespace TwitterServer
 {
@@ -40,6 +41,13 @@ namespace TwitterServer
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddTransient<IAddUserCommand, AddUserCommand>();
+            services.AddScoped<ISignInUserCommand, SignInUserCommand>();
+
+            services.AddJsonWebToken(
+                key: Configuration.GetSection("JwtKey").Get<string>(),
+                expires: TimeSpan.FromHours(5));
+
+            services.AddAuthenticationJwtBearer();
 
         }
 

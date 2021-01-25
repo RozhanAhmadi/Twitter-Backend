@@ -29,9 +29,9 @@ namespace TwitterServer.Controllers
             await _addUserCommand.AddUserHandler(request);
         }
 
-        [HttpPost("signIn")]
-        public async Task SignInUser(SignInUserDto request)
-        => await _iSignInUserCommand.SignInUserHandler(request);
+        //[HttpPost("signIn")]
+        //public async Task SignInUser(SignInUserDto request)
+        //=> await _iSignInUserCommand.SignInUserHandler(request);
         
 
         //[HttpGet]
