@@ -10,8 +10,8 @@ using TwitterServer.Data;
 namespace TwitterServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210126111236_InitialCreation")]
-    partial class InitialCreation
+    [Migration("20210126190717_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

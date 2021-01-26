@@ -56,6 +56,7 @@ namespace TwitterServer
             services.AddScoped<ISignInUserCommand, SignInUserCommand>();
             services.AddScoped<IEditUserCommand, EditUserCommand>();
             services.AddScoped<IGetUserCommand, GetUserCommand>();
+            services.AddScoped<IFollowUserCommand, FollowUserCommand>();
 
             services.AddJsonWebToken(
                 key: Configuration.GetSection("JwtKey").Get<string>(),

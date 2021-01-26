@@ -18,16 +18,18 @@ namespace TwitterServer.Controllers
         private readonly ISignInUserCommand _iSignInUserCommand;
         private readonly IEditUserCommand _ieditUserCommand;
         private readonly IGetUserCommand _iGetUserCommand;
+        private readonly IFollowUserCommand _iFollowUserCommand;
 
-        public UserController(IAddUserCommand iAddUserCommand 
-                              ,ISignInUserCommand iSignInUserCommand
-                                ,IEditUserCommand iEditUserCommand
-                                , IGetUserCommand iGetUserCommand)
+        public UserController(IAddUserCommand iAddUserCommand
+                              , ISignInUserCommand iSignInUserCommand
+                                , IEditUserCommand iEditUserCommand
+                                , IGetUserCommand iGetUserCommand, IFollowUserCommand iFollowUserCommand)
         {
             _addUserCommand = iAddUserCommand;
             _iSignInUserCommand = iSignInUserCommand;
             _ieditUserCommand = iEditUserCommand;
             _iGetUserCommand = iGetUserCommand;
+            _iFollowUserCommand = iFollowUserCommand;
         }
 
         [HttpPost]
@@ -58,6 +60,20 @@ namespace TwitterServer.Controllers
         public async Task<ResponseUserDto> GetUserById(int id)
         {
            return await _iGetUserCommand.GetUserByIdHandler(id);
+        }
+
+        [Authorize]
+        [HttpPost("follow")]
+        public async Task FollowUser(FollowUserDto request)
+        {
+            await _iFollowUserCommand.FollowUserHandler(request);
+        }
+
+        [Authorize]
+        [HttpPost("unfollow")]
+        public async Task UnfollowUser(FollowUserDto request)
+        {
+            await _iFollowUserCommand.UnfollowUserHandler(request);
         }
     }
 }

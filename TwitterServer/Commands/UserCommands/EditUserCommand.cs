@@ -42,6 +42,7 @@ namespace TwitterServer.Commands.UserCommands
                        Username = p.Username,
                        Password = p.Password,
                        Email = p.Email,
+                       UserFollowRelations = p.UserFollowRelations,
 
                    }).SingleOrDefaultAsync();
 
