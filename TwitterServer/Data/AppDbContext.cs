@@ -14,6 +14,7 @@ namespace TwitterServer.Data
             
         }
         public DbSet<UserEntity> Users { get; set; }
+        public DbSet<UserFollowRelationEntity> UserFollowRelations { get; set; }
 
     }
 }

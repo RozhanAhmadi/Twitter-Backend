@@ -15,6 +15,8 @@ using TwitterServer.Commands.UserCommands;
 using Microsoft.EntityFrameworkCore;
 using TwitterServer.Data;
 using CommonObjects.Utilities;
+using WebApi.Middlewares;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace TwitterServer
 {
@@ -35,28 +37,42 @@ namespace TwitterServer
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TwitterServer", Version = "v1" });
+                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "bearer",
+
+                });
+                c.OperationFilter<SecurityRequirementsOperationFilter>();
             });
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDatabaseDeveloperPageExceptionFilter();
+           // services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddTransient<IAddUserCommand, AddUserCommand>();
             services.AddScoped<ISignInUserCommand, SignInUserCommand>();
+            services.AddScoped<IEditUserCommand, EditUserCommand>();
+            services.AddScoped<IGetUserCommand, GetUserCommand>();
 
             services.AddJsonWebToken(
                 key: Configuration.GetSection("JwtKey").Get<string>(),
                 expires: TimeSpan.FromHours(5));
 
             services.AddAuthenticationJwtBearer();
+            services.AddHttpContextAccessor();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<ApiExceptionHandlingMiddleware>();
+
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TwitterServer v1"));
             }
@@ -64,7 +80,7 @@ namespace TwitterServer
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

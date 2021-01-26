@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,18 @@ namespace TwitterServer.Controllers
     {
         private readonly IAddUserCommand _addUserCommand;
         private readonly ISignInUserCommand _iSignInUserCommand;
+        private readonly IEditUserCommand _ieditUserCommand;
+        private readonly IGetUserCommand _iGetUserCommand;
 
-        public UserController(IAddUserCommand addUserCommand , 
-                              ISignInUserCommand iSignInUserCommand)
+        public UserController(IAddUserCommand iAddUserCommand 
+                              ,ISignInUserCommand iSignInUserCommand
+                                ,IEditUserCommand iEditUserCommand
+                                , IGetUserCommand iGetUserCommand)
         {
-            _addUserCommand = addUserCommand;
+            _addUserCommand = iAddUserCommand;
             _iSignInUserCommand = iSignInUserCommand;
+            _ieditUserCommand = iEditUserCommand;
+            _iGetUserCommand = iGetUserCommand;
         }
 
         [HttpPost]
@@ -29,20 +36,28 @@ namespace TwitterServer.Controllers
             await _addUserCommand.AddUserHandler(request);
         }
 
-        //[HttpPost("signIn")]
-        //public async Task SignInUser(SignInUserDto request)
-        //=> await _iSignInUserCommand.SignInUserHandler(request);
-        
+        [HttpPost("signIn")]
+        public async Task<TokenResponse> SignInUser(SignInUserDto request)
+        {
+            return  await _iSignInUserCommand.SignInUserHandler(request);
+        }
+        [Authorize]
+        [HttpPut()]
+        public async Task EditUser(EditUserDto request)
+        {
+            await _ieditUserCommand.EditUserHandler(request);
+        }
 
-        //[HttpGet]
-        //public async Task GetAll(AddUserDto request)
-        //{
-        //    await _addUserCommand.AddUser(request);
-        //}
-        //[HttpGet("{username}")]
-        //public async Task GetAlsl(string username)
-        //{
-        //    await _addUserCommand.AddUser(request);
-        //}
+        [HttpGet("username/{username}")]
+        public async Task<ResponseUserDto> GetUserByUsername(string username)
+        {
+           return await _iGetUserCommand.GetUserByUsernameHandler(username);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ResponseUserDto> GetUserById(int id)
+        {
+           return await _iGetUserCommand.GetUserByIdHandler(id);
+        }
     }
 }

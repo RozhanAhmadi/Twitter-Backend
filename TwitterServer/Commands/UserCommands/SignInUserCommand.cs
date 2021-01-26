@@ -7,10 +7,10 @@ using TwitterServer.Models.Dto.Account;
 using TwitterServer.Models.Dto.UserDto;
 using Microsoft.EntityFrameworkCore;
 using TwitterServer.Models.Entity;
-using TwitterServer.Models;
 using System.Security.Claims;
 using TwitterServer.Utilities;
 using CommonObjects.Utilities;
+using TwitterServer.Exceptions;
 
 namespace TwitterServer.Commands.UserCommands
 {
@@ -54,18 +54,18 @@ namespace TwitterServer.Commands.UserCommands
 
                 if (user == null)
                 {
-                    throw new TwitterApiException("Invalid useremail");
+                    throw new TwitterApiException(400,"Invalid useremail");
                 }
 
             }
 
             if(user.Password != request.Password.ToLower())
-                throw new TwitterApiException("Incorrect password!");
+                throw new TwitterApiException(400,"Incorrect password");
 
 
             
             var claims = new List<Claim>();
-            claims.AddSub(user.Id);
+            claims.AddSub(user.Id.ToString());
             claims.AddName(user.Username);
 
             var token = _jsonWebTokenService.Encode(claims);

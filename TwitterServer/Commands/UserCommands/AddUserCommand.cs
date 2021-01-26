@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TwitterServer.Data;
-using TwitterServer.Models;
+using TwitterServer.Exceptions;
 using TwitterServer.Models.Dto.UserDto;
 using TwitterServer.Models.Entity;
 
@@ -21,14 +21,14 @@ namespace TwitterServer.Commands.UserCommands
 
         public async Task AddUserHandler(AddUserDto request)
         {
-            var user = await _dbContext.Users.AnyAsync(x => x.Username == request.Username);
-            var email = await _dbContext.Users.AnyAsync(x => x.Email == request.Email);
+            var user = await _dbContext.Users.AnyAsync(x => x.Username == request.Username.ToLower());
+            var email = await _dbContext.Users.AnyAsync(x => x.Email == request.Email.ToLower());
 
             if (user)
-                throw new TwitterApiException("Username already exists!");
+                throw new TwitterApiException(400,"Username already exists");
 
             if (email)
-                throw new TwitterApiException("Email already exists!");
+                throw new TwitterApiException(400,"Email already exists");
 
             string usernamestr = request.Username;
             string emailstr = request.Email;
