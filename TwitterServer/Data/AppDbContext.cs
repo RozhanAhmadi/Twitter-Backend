@@ -17,6 +17,7 @@ namespace TwitterServer.Data
         public DbSet<TweetEntity> Tweets { get; set; }
         public DbSet<HashtagEntity> Hashtags { get; set; }
         public DbSet<UserFollowRelationEntity> UserFollowRelations { get; set; }
+        public DbSet<LikeTweetUserRelationEntity> LikeTweetUserRelations { get; set; }
         public DbSet<TweetRetweeterRelationEntity> TweetRetweeterRelations { get; set; }
         public DbSet<TweetHashtagRelationEntity> TweetHashtagRelations { get; set; }
         public DbSet<HashtagTweetRelationEntity> HashtagTweetRelations { get; set; }

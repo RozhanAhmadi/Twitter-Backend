@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TwitterServer.Commands.TweetCommands;
 using TwitterServer.Models.Dto.TweetDto;
+using TwitterServer.Models.Dto.UserDto;
 
 namespace TwitterServer.Controllers
 {
@@ -29,6 +30,20 @@ namespace TwitterServer.Controllers
         public async Task AddTweet(AddTweetDto request)
         {
             await _iTweetActionCommand.AddTweetHandler(request);
+        }
+
+        [Authorize]
+        [HttpGet("like/{id}")]
+        public async Task LikeTweet(int id)
+        {
+             await _iTweetActionCommand.LikeTweetsHandler(id);
+        }
+        
+        [Authorize]
+        [HttpGet("like/likers/{id}")]
+        public async Task<List<ResponseUserDto>> GetTweetLikers(int id)
+        {
+           return await _iTweetActionCommand.GetTweetLikersHandler(id);
         }
 
         [Authorize]

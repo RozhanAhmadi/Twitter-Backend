@@ -7,8 +7,10 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using TwitterServer.Commands.TweetCommands;
 using TwitterServer.Data;
+using TwitterServer.Exceptions;
 using TwitterServer.Models.Dto.HashtagDto;
 using TwitterServer.Models.Dto.TweetDto;
+using TwitterServer.Models.Dto.UserDto;
 using TwitterServer.Models.Entity;
 using TwitterServer.Utilities;
 
@@ -89,6 +91,72 @@ namespace TwitterServer.Commands.TweetCommands
             relationtu.UserId = creatorID;
             await _dbContext.UserTweetRelations.AddRangeAsync(relationtu);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task LikeTweetsHandler(int id)
+        {
+            var tweet = await _dbContext.Tweets.Where(p => p.Id == id).Select(p =>
+                  new TweetEntity()
+                  {
+                      Id = p.Id,
+                      Content = p.Content,
+                      CreatedAt = p.CreatedAt,
+                      CreatorId = p.CreatorId,
+                      LikeCount = p.LikeCount,
+                      RetweetCount = p.RetweetCount,
+                      IsRetweet = p.IsRetweet,
+
+                  }).SingleOrDefaultAsync();
+
+            if (tweet is null)
+                throw new TwitterApiException(400, "Invalid tweet id");
+
+            tweet.LikeCount++;
+             _dbContext.Tweets.Update(tweet);
+            await _dbContext.SaveChangesAsync();
+
+            ClaimsPrincipal user = _iHttpContextAccessor.HttpContext.User;
+            int userID = int.Parse(ClaimExtensions.GetUserId(user));
+
+            var relation = new LikeTweetUserRelationEntity();
+            relation.LikerUserId = userID;
+            relation.TweetId = id;
+
+            await _dbContext.LikeTweetUserRelations.AddAsync(relation);
+            await _dbContext.SaveChangesAsync();
+            
+        }
+
+        public async Task<List<ResponseUserDto>> GetTweetLikersHandler(int id)
+        {
+            var relations = await _dbContext.LikeTweetUserRelations.Where(p => p.TweetId == id).Select(p =>
+                   new LikeTweetUserRelationEntity()
+                   {
+                       Id = p.Id,
+                       TweetId = p.TweetId,
+                       LikerUserId = p.LikerUserId
+
+                   }).ToListAsync();
+
+            var list = new List<ResponseUserDto>();
+            if (relations != null && relations.Count > 0)
+            {
+                foreach(var relation in relations)
+                {
+                    var user = await _dbContext.Users.Where(p => p.Id == relation.LikerUserId).Select(p =>
+                        new ResponseUserDto()
+                        {
+                            Id = p.Id,
+                            Username = p.Username,
+                            Email = p.Email,
+                            Picture = p.Picture,
+
+                         }).SingleOrDefaultAsync();
+                    list.Add(user);
+                }
+            }
+
+            return list;
         }
     }
 }

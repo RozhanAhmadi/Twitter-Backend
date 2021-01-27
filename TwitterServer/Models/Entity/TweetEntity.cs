@@ -12,6 +12,7 @@ namespace TwitterServer.Models.Entity
         {
             TweetRetweeterRelations = new HashSet<TweetRetweeterRelationEntity>();
             TweetHashtagRelations = new HashSet<TweetHashtagRelationEntity>();
+            LikeTweetUserRelations = new HashSet<LikeTweetUserRelationEntity>();
         }
         public int Id { get; set; }
         [Required]
@@ -23,6 +24,7 @@ namespace TwitterServer.Models.Entity
         public bool IsRetweet { get; set; }
         public ICollection<TweetRetweeterRelationEntity> TweetRetweeterRelations { get; set; }
         public ICollection<TweetHashtagRelationEntity> TweetHashtagRelations { get; set; }
+        public ICollection<LikeTweetUserRelationEntity> LikeTweetUserRelations { get; set; }
 
     }
 }
