@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using TwitterServer.Models.Dto.UserDto;
 
-namespace TwitterServer.Commands.UserCommands
+namespace TwitterServer.Commands.UserCommands.Interfaces
 {
     public interface IEditUserCommand
     {

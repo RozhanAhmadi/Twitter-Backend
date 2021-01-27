@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using TwitterServer.Exceptions;
 using TwitterServer.Models.Entity;
 using Microsoft.AspNetCore.Http;
+using TwitterServer.Commands.UserCommands.Interfaces;
 
 namespace TwitterServer.Commands.UserCommands
 {

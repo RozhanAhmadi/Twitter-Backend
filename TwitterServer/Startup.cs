@@ -17,6 +17,8 @@ using TwitterServer.Data;
 using CommonObjects.Utilities;
 using WebApi.Middlewares;
 using Swashbuckle.AspNetCore.Filters;
+using TwitterServer.Commands.UserCommands.Interfaces;
+using TwitterServer.Commands.TweetCommands;
 
 namespace TwitterServer
 {
@@ -57,6 +59,8 @@ namespace TwitterServer
             services.AddScoped<IEditUserCommand, EditUserCommand>();
             services.AddScoped<IGetUserCommand, GetUserCommand>();
             services.AddScoped<IFollowUserCommand, FollowUserCommand>();
+            services.AddScoped<ITweetActionCommand, TweetActionCommand>();
+            services.AddScoped<IGetTweetCommand, GetTweetCommand>();
 
             services.AddJsonWebToken(
                 key: Configuration.GetSection("JwtKey").Get<string>(),
@@ -88,6 +92,7 @@ namespace TwitterServer
             {
                 endpoints.MapControllers();
             });
+            
         }
     }
 }

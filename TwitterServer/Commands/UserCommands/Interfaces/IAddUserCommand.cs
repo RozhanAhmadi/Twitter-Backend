@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TwitterServer.Models.Dto.UserDto;
 
-namespace TwitterServer.Commands.UserCommands
+namespace TwitterServer.Commands.UserCommands.Interfaces
 {
     public interface IAddUserCommand
     {

@@ -11,6 +11,7 @@ using System.Security.Claims;
 using TwitterServer.Utilities;
 using CommonObjects.Utilities;
 using TwitterServer.Exceptions;
+using TwitterServer.Commands.UserCommands.Interfaces;
 
 namespace TwitterServer.Commands.UserCommands
 {

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using TwitterServer.Commands.UserCommands.Interfaces;
 using TwitterServer.Data;
 using TwitterServer.Models.Dto.UserDto;
 using TwitterServer.Models.Entity;

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TwitterServer.Commands.UserCommands.Interfaces;
 using TwitterServer.Data;
 using TwitterServer.Exceptions;
 using TwitterServer.Models.Dto.UserDto;
@@ -26,8 +27,8 @@ namespace TwitterServer.Commands.UserCommands
                   {
                       Id = p.Id,
                       Username = p.Username,
-                      Password = p.Password,
                       Email = p.Email,
+                      Picture = p.Picture,
 
                   }).SingleOrDefaultAsync();
             if(user is null)
@@ -43,8 +44,8 @@ namespace TwitterServer.Commands.UserCommands
                  {
                      Id = p.Id,
                      Username = p.Username,
-                     Password = p.Password,
                      Email = p.Email,
+                     Picture = p.Picture,
 
                  }).SingleOrDefaultAsync();
             if (user is null)

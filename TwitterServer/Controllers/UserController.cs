@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TwitterServer.Commands.UserCommands;
+using TwitterServer.Commands.UserCommands.Interfaces;
 using TwitterServer.Models.Dto.Account;
 using TwitterServer.Models.Dto.UserDto;
 
@@ -23,7 +24,8 @@ namespace TwitterServer.Controllers
         public UserController(IAddUserCommand iAddUserCommand
                               , ISignInUserCommand iSignInUserCommand
                                 , IEditUserCommand iEditUserCommand
-                                , IGetUserCommand iGetUserCommand, IFollowUserCommand iFollowUserCommand)
+                                , IGetUserCommand iGetUserCommand
+                                , IFollowUserCommand iFollowUserCommand)
         {
             _addUserCommand = iAddUserCommand;
             _iSignInUserCommand = iSignInUserCommand;
@@ -75,5 +77,6 @@ namespace TwitterServer.Controllers
         {
             await _iFollowUserCommand.UnfollowUserHandler(request);
         }
+        
     }
 }
