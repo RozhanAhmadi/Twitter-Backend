@@ -31,9 +31,12 @@ namespace TwitterServer.Commands.UserCommands
 
             ClaimsPrincipal user = _iHttpContextAccessor.HttpContext.User;
 
-            var userInstance = await _dbContext.Users.AnyAsync(x => x.Username == request.Username.ToLower());
-            if(userInstance)
-                throw new TwitterApiException(400, "Username already exists");
+            if(request.Username != string.Empty)
+            {
+                var userInstance = await _dbContext.Users.AnyAsync(x => x.Username == request.Username.ToLower());
+                if (userInstance)
+                    throw new TwitterApiException(400, "Username already exists");
+            }            
 
             string nameToFind = user.Identity.Name.ToLower();
             var userToEdit = await _dbContext.Users.Where(p => p.Username == nameToFind).Select(p =>
@@ -44,12 +47,26 @@ namespace TwitterServer.Commands.UserCommands
                        Password = p.Password,
                        Email = p.Email,
                        UserFollowRelations = p.UserFollowRelations,
+                       UserTweetRelations = p.UserTweetRelations,
 
                    }).SingleOrDefaultAsync();
+            bool edited = false;
+            if (request.Username != string.Empty)
+            {
+                userToEdit.Username = request.Username.ToLower();
+                edited = true;
+            }
+            if (request.Picture != string.Empty)
+            {
+                userToEdit.Picture = request.Picture;
+                edited = true;
+            }
 
-            userToEdit.Username = request.Username.ToLower();
-            _dbContext.Users.Update(userToEdit);
-            await _dbContext.SaveChangesAsync();
+            if (edited)
+            {
+                _dbContext.Users.Update(userToEdit);
+                await _dbContext.SaveChangesAsync();
+            }            
         }
     }
 }

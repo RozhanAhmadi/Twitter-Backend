@@ -53,7 +53,7 @@ namespace TwitterServer.Controllers
         }
 
         [HttpGet("username/{username}")]
-        public async Task<ResponseUserDto> GetUserByUsername(string username)
+        public async Task<List<ResponseUserDto>> GetUserByUsername(string username)
         {
            return await _iGetUserCommand.GetUserByUsernameHandler(username);
         }

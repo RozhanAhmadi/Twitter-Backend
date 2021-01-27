@@ -9,6 +9,6 @@ namespace TwitterServer.Commands.UserCommands.Interfaces
     public interface IGetUserCommand
     {
         public Task<ResponseUserDto> GetUserByIdHandler(int id);
-        public Task<ResponseUserDto> GetUserByUsernameHandler(string username);
+        public Task<List<ResponseUserDto>> GetUserByUsernameHandler(string username);
     }
 }

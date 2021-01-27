@@ -10,5 +10,8 @@ namespace TwitterServer.Commands.TweetCommands
     {
         public Task<List<ResponseTweetDto>> GetHomeTweetsHandler();
         public Task<List<ResponseTweetDto>> GetSelfTweetsHandler();
+        public Task<List<ResponseTweetDto>> GetTweetByContentHandler(GetByTextDto request); 
+        public Task<List<ResponseTweetDto>> GetTweetByHashtagHandler(GetByTextDto request); 
+        public Task<ResponseTweetDto> GetTweetByIdHandler(int id);
     }
 }

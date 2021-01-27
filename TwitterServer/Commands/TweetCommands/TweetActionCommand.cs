@@ -29,6 +29,7 @@ namespace TwitterServer.Commands.TweetCommands
             var tag = await _dbContext.Hashtags.Where(x => x.Content == hashtag.Content.ToLower()).Select(p =>
             new HashtagEntity()
             {
+                Id = p.Id,
                 Content = p.Content,
                 HashtagTweetRelations = p.HashtagTweetRelations,
             }).SingleOrDefaultAsync();
@@ -41,7 +42,6 @@ namespace TwitterServer.Commands.TweetCommands
 
             var newTweet = new TweetEntity()
             {
-                //Link=LinkGenerator(model.title),
                 Content = request.Content,
                 CreatedAt = DateTime.Now,
                 CreatorId = creatorID,
@@ -52,6 +52,7 @@ namespace TwitterServer.Commands.TweetCommands
 
             await _dbContext.Tweets.AddAsync(newTweet);
             await _dbContext.SaveChangesAsync();
+
             if (request.HashTags != null && request.HashTags.Count > 0)
             {
                 var list = new List<TweetHashtagRelationEntity>();

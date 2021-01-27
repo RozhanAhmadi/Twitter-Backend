@@ -37,9 +37,9 @@ namespace TwitterServer.Commands.UserCommands
             return user;
         }
 
-        public async Task<ResponseUserDto> GetUserByUsernameHandler(string username)
+        public async Task<List<ResponseUserDto>> GetUserByUsernameHandler(string username)
         {
-            var user = await _dbContext.Users.Where(p => p.Username == username.ToLower()).Select(p =>
+            var user = await _dbContext.Users.Where(p => p.Username.Contains(username.ToLower())).Select(p =>
                  new ResponseUserDto()
                  {
                      Id = p.Id,
@@ -47,7 +47,7 @@ namespace TwitterServer.Commands.UserCommands
                      Email = p.Email,
                      Picture = p.Picture,
 
-                 }).SingleOrDefaultAsync();
+                 }).ToListAsync();
             if (user is null)
                 throw new TwitterApiException(400, "Invalid Username");
 

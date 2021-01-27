@@ -43,5 +43,22 @@ namespace TwitterServer.Controllers
         {
             return await _iGetTweetCommand.GetSelfTweetsHandler();
         }
+
+        [HttpGet("{id}")]
+        public async Task<ResponseTweetDto> GetTweetById(int id)
+        {
+            return await _iGetTweetCommand.GetTweetByIdHandler(id);
+        }
+
+        [HttpPost("SearchByContent")]
+        public async Task<List<ResponseTweetDto>> GetTweetByContent(GetByTextDto request)
+        {
+            return await _iGetTweetCommand.GetTweetByContentHandler(request);
+        }
+        [HttpPost("SearchByHashtag")]
+        public async Task<List<ResponseTweetDto>> GetTweetByHashtag(GetByTextDto request)
+        {
+            return await _iGetTweetCommand.GetTweetByHashtagHandler(request);
+        }
     }
 }
