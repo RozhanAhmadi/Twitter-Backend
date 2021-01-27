@@ -33,6 +33,12 @@ namespace TwitterServer.Controllers
         }
 
         [Authorize]
+        [HttpDelete("{id}")]
+        public async Task DeleteTweet(int id)
+        {
+            await _iTweetActionCommand.DeleteTweetsHandler(id);
+        }
+        [Authorize]
         [HttpGet("like/{id}")]
         public async Task LikeTweet(int id)
         {
@@ -44,6 +50,12 @@ namespace TwitterServer.Controllers
         public async Task<List<ResponseUserDto>> GetTweetLikers(int id)
         {
            return await _iTweetActionCommand.GetTweetLikersHandler(id);
+        }
+        [Authorize]
+        [HttpGet("retweet/{id}")]
+        public async Task Retweet(int id)
+        {
+            await _iTweetActionCommand.RetweetHandler(id);
         }
 
         [Authorize]

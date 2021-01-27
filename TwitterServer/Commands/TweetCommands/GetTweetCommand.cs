@@ -65,6 +65,8 @@ namespace TwitterServer.Commands.TweetCommands
                                     RetweetCount = p.RetweetCount,
                                     IsRetweet = p.IsRetweet,
                                 }).SingleOrDefaultAsync();
+                            if (tweettt.CreatorId != tweetf.UserId)
+                                tweettt.IsRetweet = true;
                             list.Add(tweettt);
                         }
                     }
@@ -80,18 +82,36 @@ namespace TwitterServer.Commands.TweetCommands
             ClaimsPrincipal user = _iHttpContextAccessor.HttpContext.User;
             string userName = user.Identity.Name.ToLower();
             int userID = int.Parse(ClaimExtensions.GetUserId(user));
-            var selfTweets = await _dbContext.Tweets.Where(p => p.CreatorId == userID).Select(p =>
-                                new ResponseTweetDto()
-                                {
-                                    Id = p.Id,
-                                    Content = p.Content,
-                                    CreatedAt = p.CreatedAt,
-                                    CreatorId = p.CreatorId,
-                                    LikeCount = p.LikeCount,
-                                    RetweetCount = p.RetweetCount,
-                                    IsRetweet = p.IsRetweet,
-                                }).ToListAsync();
-            List<ResponseTweetDto> SortedList = selfTweets.OrderByDescending(o => o.CreatedAt).ToList();
+            var relations = await _dbContext.UserTweetRelations.AsNoTracking().Where(p => p.UserId == userID).Select(p =>
+                  new UserTweetRelationEntity()
+                  {
+                      Id = p.Id,
+                      UserId = p.UserId,
+                      TweetId = p.TweetId,
+                  }).ToListAsync();
+            var list = new List<ResponseTweetDto>();
+            if (relations != null && relations.Count > 0)
+            {
+                foreach (var relation in relations)
+                {
+                    var tweet = await _dbContext.Tweets.Where(p => p.Id == relation.TweetId).Select(p =>
+                        new ResponseTweetDto()
+                        {
+                            Id = p.Id,
+                            Content = p.Content,
+                            CreatedAt = p.CreatedAt,
+                            CreatorId = p.CreatorId,
+                            LikeCount = p.LikeCount,
+                            RetweetCount = p.RetweetCount,
+                            IsRetweet = p.IsRetweet,
+                        }).SingleOrDefaultAsync();
+
+                    if (tweet.CreatorId != relation.UserId)
+                        tweet.IsRetweet = true;
+                    list.Add(tweet);
+                }
+            }           
+            List<ResponseTweetDto> SortedList = list.OrderByDescending(o => o.CreatedAt).ToList();
             return SortedList;
         }
         public async Task<ResponseTweetDto> GetTweetByIdHandler(int id)

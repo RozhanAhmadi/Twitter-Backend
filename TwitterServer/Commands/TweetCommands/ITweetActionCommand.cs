@@ -12,5 +12,7 @@ namespace TwitterServer.Commands.TweetCommands
         public Task AddTweetHandler(AddTweetDto request);
         public Task LikeTweetsHandler(int id);
         public Task<List<ResponseUserDto>> GetTweetLikersHandler(int id);
+        public Task RetweetHandler(int id);
+        public Task DeleteTweetsHandler(int id);
     }
 }
