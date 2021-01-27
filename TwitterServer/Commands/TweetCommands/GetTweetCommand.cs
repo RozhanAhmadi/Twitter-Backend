@@ -206,5 +206,19 @@ namespace TwitterServer.Commands.TweetCommands
             List<ResponseTweetDto> SortedList = list.OrderByDescending(o => o.CreatedAt).ToList();
             return SortedList;
         }
+
+        public async Task<List<ResponseHashtagDto>> GetTopHashtagsHandler()
+        {
+            var tags = await _dbContext.Hashtags.Select(p =>
+                  new ResponseHashtagDto()
+                  {
+                      Id = p.Id,
+                      Content = p.Content,
+                      UsageCount = p.UsageCount,
+
+                  }).ToListAsync();
+            List<ResponseHashtagDto> SortedList = (List<ResponseHashtagDto>) tags.OrderByDescending(o => o.UsageCount).Take(10).ToList();
+            return SortedList;
+        }
     }
 }

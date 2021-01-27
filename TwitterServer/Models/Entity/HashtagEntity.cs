@@ -15,6 +15,7 @@ namespace TwitterServer.Models.Entity
         public int Id { get; set; }
         [Required]
         public string Content { get; set; }
+        public int UsageCount { get; set; }
         public ICollection<HashtagTweetRelationEntity> HashtagTweetRelations { get; set; }
     }
 }

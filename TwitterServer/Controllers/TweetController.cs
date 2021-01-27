@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TwitterServer.Commands.TweetCommands;
+using TwitterServer.Models.Dto.HashtagDto;
 using TwitterServer.Models.Dto.TweetDto;
 using TwitterServer.Models.Dto.UserDto;
 
@@ -69,6 +70,12 @@ namespace TwitterServer.Controllers
         public async Task<List<ResponseTweetDto>> GetSelfTweets()
         {
             return await _iGetTweetCommand.GetSelfTweetsHandler();
+        }
+        
+        [HttpGet("TopHashtags")]
+        public async Task<List<ResponseHashtagDto>> GetTopHashtags()
+        {
+            return await _iGetTweetCommand.GetTopHashtagsHandler();
         }
 
         [HttpGet("{id}")]

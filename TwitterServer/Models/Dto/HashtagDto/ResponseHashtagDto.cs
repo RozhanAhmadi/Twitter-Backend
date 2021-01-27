@@ -9,5 +9,6 @@ namespace TwitterServer.Models.Dto.HashtagDto
     {
         public int Id { get; set; }
         public string Content { get; set; }
+        public int UsageCount { get; set; }
     }
 }

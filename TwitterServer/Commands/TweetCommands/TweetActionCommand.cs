@@ -34,6 +34,7 @@ namespace TwitterServer.Commands.TweetCommands
                 Id = p.Id,
                 Content = p.Content,
                 HashtagTweetRelations = p.HashtagTweetRelations,
+                UsageCount = p.UsageCount,
             }).SingleOrDefaultAsync();
             return tag;
         }
@@ -65,7 +66,14 @@ namespace TwitterServer.Commands.TweetCommands
                     {
                         tag = new HashtagEntity();
                         tag.Content = hashtag.Content.ToLower();
+                        tag.UsageCount = 1;
                         await _dbContext.Hashtags.AddAsync(tag);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        tag.UsageCount++;
+                        _dbContext.Hashtags.Update(tag);
                         await _dbContext.SaveChangesAsync();
                     }
 
