@@ -71,12 +71,6 @@ namespace TwitterServer.Controllers
         {
             return await _iGetTweetCommand.GetSelfTweetsHandler();
         }
-        
-        [HttpGet("TopHashtags")]
-        public async Task<List<ResponseHashtagDto>> GetTopHashtags()
-        {
-            return await _iGetTweetCommand.GetTopHashtagsHandler();
-        }
 
         [HttpGet("{id}")]
         public async Task<ResponseTweetDto> GetTweetById(int id)

@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using TwitterServer.Commands.UserCommands.Interfaces;
 using TwitterServer.Data;
+using TwitterServer.Enum;
 using TwitterServer.Models.Dto.UserDto;
 using TwitterServer.Models.Entity;
 using TwitterServer.Utilities;
@@ -44,6 +45,21 @@ namespace TwitterServer.Commands.UserCommands
             relation.FollowingId = following.Id;
             await _dbContext.UserFollowRelations.AddAsync(relation);
             await _dbContext.SaveChangesAsync();
+
+            var activityLog = new ActivityLogEntity()
+            {
+                ActorId = int.Parse(followerID),
+                ActorName = user.Identity.Name,
+                ActionTypeId = (int)ActionLogEnums.Follow,
+                ActionTypeName = "Follow",
+                TargetTweetId = -1,
+                TargetUserId = following.Id,
+                Date = DateTime.Now,
+            };
+
+            await _dbContext.ActivityLogs.AddAsync(activityLog);
+            await _dbContext.SaveChangesAsync();
+
 
         }
 

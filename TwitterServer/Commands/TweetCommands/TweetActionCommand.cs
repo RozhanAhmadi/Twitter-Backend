@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using TwitterServer.Commands.TweetCommands;
 using TwitterServer.Data;
+using TwitterServer.Enum;
 using TwitterServer.Exceptions;
 using TwitterServer.Models.Dto.HashtagDto;
 using TwitterServer.Models.Dto.TweetDto;
@@ -132,7 +133,21 @@ namespace TwitterServer.Commands.TweetCommands
 
             await _dbContext.LikeTweetUserRelations.AddAsync(relation);
             await _dbContext.SaveChangesAsync();
-            
+
+            var activityLog = new ActivityLogEntity()
+            {
+                ActorId = userID,
+                ActorName = user.Identity.Name,
+                ActionTypeId = (int)ActionLogEnums.Like,
+                ActionTypeName = "Like",
+                TargetTweetId = tweet.Id,
+                TargetUserId = tweet.CreatorId,
+                Date = DateTime.Now,
+            };
+
+            await _dbContext.ActivityLogs.AddAsync(activityLog);
+            await _dbContext.SaveChangesAsync();
+
         }
 
         public async Task<List<ResponseUserDto>> GetTweetLikersHandler(int id)
@@ -202,6 +217,20 @@ namespace TwitterServer.Commands.TweetCommands
             relationn.TweetId = tweet.Id;
             relationn.RetweeterId = userID;
             await _dbContext.TweetRetweeterRelations.AddRangeAsync(relationn);
+            await _dbContext.SaveChangesAsync();
+
+            var activityLog = new ActivityLogEntity()
+            {
+                ActorId = userID,
+                ActorName = user.Identity.Name,
+                ActionTypeId = (int) ActionLogEnums.Retweet,
+                ActionTypeName = "Retweet",
+                TargetTweetId = tweet.Id,
+                TargetUserId = tweet.CreatorId,
+                Date = DateTime.Now,
+            };
+
+            await _dbContext.ActivityLogs.AddAsync(activityLog);
             await _dbContext.SaveChangesAsync();
 
         }
