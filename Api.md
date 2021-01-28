@@ -5,7 +5,7 @@
 
 **Method** : `GET`
 
-**Auth required** : YES
+**Auth required** : NO
 
 ### Success Responses
 
@@ -67,3 +67,60 @@
   }
 ]
 ```
+## Show User's recent activity log
+Show user's recent activity log .Activty May include retweeting. liking tweets or following another user
+
+**URL** : `/api/Info/SelfLogs`
+
+**Method** : `GET`
+
+**Auth required** : YES
+
+### Success Responses
+
+**Code** : `200 OK`
+
+**Content** : An array of activity logs , user will be the actor 
+
+```json
+[
+    {
+        "id": 1,
+        "actorId": 1,
+        "actorName": "user1",
+        "actionTypeName": "Follow",
+        "actionTypeId": 3,
+        "targetTweetId": -1,
+        "targetUserId": 4,
+        "date": "2021-01-28T11:08:03.3193899"
+    }
+]
+```
+## Show recent activity happened to user
+Show recent activity happened to user by other users
+
+**URL** : `/api/Info/HomeLogs`
+
+**Method** : `GET`
+
+**Auth required** : YES
+
+### Success Responses
+
+**Code** : `200 OK`
+
+**Content** : An array of activity logs , user will be the target and in case of like/retweet the user's tweet will also be the target 
+
+```json
+[
+    {
+        "id": 1,
+        "actorId": 1,
+        "actorName": "user1",
+        "actionTypeName": "Follow",
+        "actionTypeId": 3,
+        "targetTweetId": -1,
+        "targetUserId": 4,
+        "date": "2021-01-28T11:08:03.3193899"
+    }
+]
