@@ -1,7 +1,7 @@
 ﻿# Tweet
 ## Create Tweet
 
-**URL** : `​/api​/Tweets`
+**URL** : `​/api​/Tweet`
 
 **Method** : `Post`
 
