@@ -20,6 +20,7 @@ using Swashbuckle.AspNetCore.Filters;
 using TwitterServer.Commands.UserCommands.Interfaces;
 using TwitterServer.Commands.TweetCommands;
 using TwitterServer.Commands;
+using TwitterServer.Commands.InfoCommands;
 
 namespace TwitterServer
 {

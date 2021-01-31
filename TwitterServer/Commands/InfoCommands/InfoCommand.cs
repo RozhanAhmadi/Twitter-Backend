@@ -7,10 +7,11 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using TwitterServer.Data;
 using TwitterServer.Models.Dto;
+using TwitterServer.Models.Dto.ActivityDto;
 using TwitterServer.Models.Dto.HashtagDto;
 using TwitterServer.Utilities;
 
-namespace TwitterServer.Commands
+namespace TwitterServer.Commands.InfoCommands
 {
     public class InfoCommand : IInfoCommand
     {

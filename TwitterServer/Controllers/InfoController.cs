@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TwitterServer.Commands;
+using TwitterServer.Commands.InfoCommands;
 using TwitterServer.Models.Dto;
+using TwitterServer.Models.Dto.ActivityDto;
 using TwitterServer.Models.Dto.HashtagDto;
 
 namespace TwitterServer.Controllers
